@@ -1,10 +1,11 @@
 import os
 from flask import Flask
-import platform
-from flask_mysqldb import MySQL
+# from flask_mysqldb import MySQL
+import pymysql
 from dotenv import load_dotenv
 # from .utils.momentjs import *
 
+pymysql.install_as_MySQLdb()
 load_dotenv()
 
 
@@ -37,7 +38,7 @@ def create_app(test_config=None):
     #     app.config.from_mapping(test_config)
 
     # inicializar MySQL
-    mysql = MySQL(app)
+    # mysql = MySQL(app)
 
     # ensure the instance folder exists
     # try:
