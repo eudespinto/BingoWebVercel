@@ -5,15 +5,14 @@
         "src": "flaskr/app.py",
         "use": "@vercel/python",
         "config": {
-          "maxLambdaSize": "15mb",
-          "runtime": "Python3.9"
+          "maxDuration": 10
         }
       }
     ],
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "flaskr/app.py"
+        "dest": "/flaskr/app.py"
       }
     ]
   }
