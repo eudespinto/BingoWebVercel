@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% set TITLE = 'Bingo'%}
+        {% block title %}{{TITLE}}{% endblock %} - Flaskr
+    </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='animate.min.css') }}"/>
+</head>
+
+<body class="corpo">
+    <nav>
+        <h1>CASSINO DO EUDENES</h1>
+        <ul>
+            {% if g.user %}
+                <li>
+                    <span>{{ g.user['username'] }}</span>
+                </li>
+                <li>
+                    <a href="{{ url_for('auth.logout') }}">Log Out</a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{{ url_for('auth.register') }}">Register</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('auth.login') }}">Log In</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <section>
+        <section class="content_header">
+            <header>
+                {% block header %}
+                    <h1>{{TITLE}}!!!</h1>
+                    <spam>
+                        <form method="post">
+<!--                            <input name="alterarBolas" type="submit" value="Alterar Bolas">-->
+                            <input name="conferir" type="submit" value="Conferir">
+                            <input name="ranking" type="submit" value="Ranking">
+                            <input name="gerador" type="submit" value="Gerar Cartelas">
+                            <input name="reset" type="submit" value="Reset">
+                            <input name="config" type="submit" value="Configurações">
+                        </form>
+                    </spam>
+                {% endblock %}
+            </header>
+        </section>
+        <section class="content_part">
+            <section class="content_lateral">
+                <aside>
+                    {% set bolas3 = namespace(value=0) %}
+                    {% set bolas2 = namespace(value=0) %}
+                    {% set bolas1 = namespace(value=0) %}
+                    {% if 'Cartelas' in bolas['rankingJson']%}
+                        {% for cartela in bolas['rankingJson']['Cartelas'] %}
+<!--                            Cartela {{cartela}}: {{bolas['rankingJson']['Cartelas'][cartela].__len__()}}-->
+                            {% if bolas['rankingJson']['Cartelas'][cartela].__len__() == 3 %}
+                                {% set bolas3.value = bolas3.value + 1 %}
+                            {% elif bolas['rankingJson']['Cartelas'][cartela].__len__() == 2 %}
+                                {% set bolas2.value = bolas2.value + 1 %}
+                            {% elif bolas['rankingJson']['Cartelas'][cartela].__len__() == 1 %}
+                                {% set bolas1.value = bolas1.value + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    <strong>
+                        {% if bolas1.value != 0 %}
+                            {% if bolas1.value > 1  %}
+                                <p>Existem {{ bolas1.value }} cartelas faltando 1 bolas.</p>
+                            {% else %}
+                                <p>Existe {{ bolas1.value }} cartela faltando 1 bolas.</p>
+                            {% endif %}
+                        {% endif %}
+                        {% if bolas2.value != 0 %}
+                            {% if bolas2.value > 1  %}
+                                <p>Existem {{ bolas2.value }} cartelas faltando 2 bolas.</p>
+                            {% else %}
+                                <p>Existe {{ bolas2.value }} cartela faltando 2 bolas.</p>
+                            {% endif %}
+                        {% endif %}
+                        {% if bolas3.value != 0 %}
+                            {% if bolas3.value > 1  %}
+                                <p>Existem {{ bolas3.value }} cartelas faltando 3 bolas. </p>
+                            {% else %}
+                                <p>Existe {{ bolas3.value }} cartela faltando 3 bolas. </p>
+                            {% endif %}
+                        {% endif %}
+                    </strong>
+
+                </aside>
+            </section>
+            <section class="content_body">
+                <article>
+                    {% for message in get_flashed_messages() %}
+                        <div class="flash">{{ message }}</div>
+                    {% endfor %}
+                    {% block content %}
+                        <div class="tela_principal">
+                            <div>
+                                <table >
+                                    {% set min = -9 %}
+                                    {% set max = 1 %}
+                                    {% for num in range(10, qtdBolas + 10, 10) %}
+                                        {% set min = min + num %}
+                                        {% set max = max + num %}
+                                            <tr>
+                                                {% for i in range(min, max) %}
+                                                    <td class="tabela_principal">
+                                                        {% if i in bolas['bolasDoBingoJson']['BolasSorteadas'] %}
+                                                            <span><strong>{{i.__str__().zfill(2)}}</strong></span>
+                                                        {% else %}
+                                                            <span class="apagar">00</span>
+                                                        {% endif %}
+                                                    </td>
+                                                {% endfor %}
+                                            </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                            <div class="tela_secundaria">
+                                <div>
+                                    <div>
+                                        <table>
+                                            <tr>
+                                                <th >
+                                                    {% if 'a' == 'a'%}
+                                                        <img class="roda_bingo" src="{{ url_for('static', filename='images/globo.gif') }}">
+                                                    {% else %}
+                                                        <img class="roda_bingo" src="{{ url_for('static', filename='images/globo-foto.png') }}">
+                                                    {% endif %}
+                                                </th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div>
+                                        <table>
+                                            <tr>
+                                                <th class="animate__animated animate__fadeIn animate__slower" id="bola_escolhida">
+                                                    {{ bolas['bolasDoBingoJson']['BolaEscolhida'][0].__str__().zfill(2) if 'BolaEscolhida' in bolas['bolasDoBingoJson'] else ''}}
+                                                </th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tela_botoes">
+                                    <form method="post">
+                                        <input name="novaBola" type="submit" value="Nova Bola">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endblock %}
+                </article>
+            </section>
+            <section class="content_lateral">
+                <aside>
+                    <strong>
+                        {% if 'Premiacao' in bolas['rankingJson']%}
+                            {% for premio in bolas['rankingJson']['Premiacao'] %}
+                                <p>{{premio}}º Lugar: {{bolas['rankingJson']['Premiacao'][premio]}}</p>
+                            {% endfor %}
+                        {% endif %}
+                    </strong>
+                </aside>
+            </section>
+        </section>
+    </section>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% extends 'base.html' %}
+    {% block header %}
+        <h1>{% block title %}Conferir{% endblock %}</h1>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+        <form method="post">
+            <label for="cartela">Digite o número da Cartela</label>
+            <input name="cartela" id="cartela" type="number" value="{{ request.form['cartela'] }}" required>
+            <input type="submit" value="Conferir">
+        </form>
+        <form method="post">
+            <input name="cancel" type="submit" value="Cancel">
+        </form>
+        <div>
+            {% if 'Conferindo' in bolas['rankingJson'] %}
+                {% set numConferencia = bolas['rankingJson']['Conferindo'] %}
+                {% if bolas['rankingJson']['Cartelas'].__len__() > 0%}
+                    {% if numConferencia in bolas['rankingJson']['Cartelas'] %}
+                        {% if bolas['rankingJson']['Cartelas'][numConferencia].__len__() > 0 %}
+                           Restam {{bolas['rankingJson']['Cartelas'][numConferencia].__len__()}} números na Cartela {{ numConferencia }}.
+                        {% else %}
+                            Cartela {{ numConferencia }} fez BINGO!!
+                            {% if numConferencia not in bolas['rankingJson']['Vencedores']['CartelasBingo'] %}
+                                <form method="post">
+                                    <label for="adicionar">Digite o nome do(a) vencedor(a)</label>
+                                    <input name="adicionar" id="adicionar" value="{{ request.form['adicionar'] }}" required>
+                                    <input type="submit" value="Salvar">
+                                </form>
+                            {% else %}
+                                <br>
+                                Cartela já cadastrada
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        Não existe a cartela de número {{ numConferencia }}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        </div>
+    {% endblock %}
+</body>
+</html>

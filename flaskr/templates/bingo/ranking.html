@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% extends 'base.html' %}
+    {% block header %}
+        <h1>{% block title %}Ranking{% endblock %}</h1>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+        <div>
+            {% if 'Vencedores' in bolas['rankingJson'] %}
+                {% if 'nomes' in bolas['rankingJson']['Vencedores'] %}
+                    {% for colocação in bolas['rankingJson']['Vencedores']['nomes']%}
+                        <table>
+                            <tr class="tela_vencedores">
+                                <th>{{ colocação|int }}º Lugar: </th>
+                            </tr>
+                            <tr class="tela_vencedores">
+                                {% for vencedor in bolas['rankingJson']['Vencedores']['nomes'][colocação] %}
+                                <th class="vencedores">{{ vencedor }}</th>
+                                {% endfor%}
+                            </tr>
+                        </table>
+                    {% endfor %}
+                {% endif %}
+            {% else %}
+                Ainda não há vencedores.
+            {% endif %}
+        </div>
+        <form method="post">
+            <input name="cancel" type="submit" value="Voltar">
+        </form>
+    {% endblock %}
+</body>
+</html>

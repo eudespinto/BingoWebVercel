@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% set TITLE = 'Culto de Casais'%}
+        {% block title %}{{TITLE}}{% endblock %} - Flaskr
+    </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='animate.min.css') }}"/>
+</head>
+
+<body class="corpo">
+    <nav>
+        <h1>Culto de Casais</h1>
+        <ul>
+            {% if g.user %}
+                <li>
+                    <span>{{ g.user['username'] }}</span>
+                </li>
+                <li>
+                    <a href="{{ url_for('auth.logout') }}">Log Out</a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{{ url_for('auth.register') }}">Register</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('auth.login') }}">Log In</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <section>
+        <section class="content_header">
+            <header>
+                {% block header %}
+                    <h1>{{TITLE}}!!!</h1>
+                    <spam>
+                        <form method="post">
+<!--                            <input name="alterarBolas" type="submit" value="Alterar Bolas">-->
+<!--                            <input name="conferir" type="submit" value="Conferir">-->
+<!--                            <input name="ranking" type="submit" value="Ranking">-->
+<!--                            <input name="gerador" type="submit" value="Gerar Cartelas">-->
+<!--                            <input name="reset" type="submit" value="Reset">-->
+<!--                            <input name="config" type="submit" value="Configurações">-->
+                        </form>
+                    </spam>
+                {% endblock %}
+            </header>
+        </section>
+        <section class="content_part">
+            <section class="content_body">
+                <article>
+                    {% for message in get_flashed_messages() %}
+                        <div class="flash">{{ message }}</div>
+                    {% endfor %}
+                    {% block content %}
+                        <div class="tela_principal_culto_casais">
+                            <div class="tabela_principal_culto_casais">
+                                <p>AQUI!!!!</p>
+                            </div>
+                        </div>
+                    {% endblock %}
+                </article>
+            </section>
+        </section>
+    </section>
+</body>
+</html>

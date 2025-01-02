@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% set TITLE = 'Cartelas'%}
+        {{ TITLE }}
+    </title>
+    <link rel="stylesheet" href="./flaskr/static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>-->
+</head>
+
+<body class="corpo">
+    <section>
+        <section class="content_header_cartelas">
+            <header>
+                {% block header %}
+                    <form method="post">
+                        <input name="voltar" type="submit" value="Voltar">
+                    </form>
+                {% endblock %}
+            </header>
+        </section>
+        <section class="content_part">
+            <section class="content_body">
+                <article>
+                    {% for message in get_flashed_messages() %}
+                        <div class="flash">{{ message }}</div>
+                    {% endfor %}
+                    {% block content %}
+                        <div class="tela_principal_cartelas">
+                            {% set linha = namespace(value=1) %}
+                            {% set espaco_linha = 4 %}
+                            {% set div_page = espaco_linha * 3 %}
+                            {% set div_in = namespace(value=1) %}
+                            {% set div_tot = namespace(value=1) %}
+                            {% set div_out = bolas['rankingJson']['Cartelas'].__len__() %}
+                            {% for i in bolas['rankingJson']['Cartelas'] %}
+                                        {% if div_in.value == 1 %}
+                                <div>
+                                    <table class="tabela_principal_cartelas">
+                                        {% endif %}
+                                        {% if linha.value == 1 %}
+                                            <tr>
+                                        {% endif %}
+                                                <td>
+                                                    <table class="tabela_interna_cartelas_table">
+                                                        <tr>
+                                                            <th class="tabela_interna_cartelas_hd">
+                                                                Cartela N° {{ i }}
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <table>
+                                                                    {% set min = -5 %}
+                                                                    {% set max = 0 %}
+                                                                    {% for num in range(5, bolas['rankingJson']['Cartelas'][i].__len__() + 5, 5) %}
+                                                                        {% set min = min + num %}
+                                                                        {% set max = max + num %}
+                                                                            <tr>
+                                                                                {% for j in range(min, max) %}
+                                                                                    <td class="tabela_interna_cartelas_bd">
+                                                                                        <span>
+                                                                                            <strong>
+                                                                                                {{bolas['rankingJson']['Cartelas'][i][j].__str__().zfill(2)}}
+                                                                                            </strong>
+                                                                                        </span>
+                                                                                    </td>
+                                                                                {% endfor %}
+                                                                            </tr>
+                                                                    {% endfor %}
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                        {% if linha.value % espaco_linha == 0 %}
+                                            </tr>
+                                        {% endif %}
+                                        {% if linha.value == espaco_linha %}
+                                            {% set linha.value = 0 %}
+                                        {% endif %}
+                                        {% set linha.value = linha.value + 1 %}
+                                        {% if div_tot.value == div_out or div_in.value == div_page %}
+                                    </table>
+                                </div>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                        {% set div_in.value = 0 %}
+                                        {% endif %}
+                                        {% set div_in.value = div_in.value + 1 %}
+                                        {% set div_tot.value = div_tot.value + 1 %}
+                            {% endfor %}
+                        </div>
+                    {% endblock %}
+                </article>
+            </section>
+        </section>
+    </section>
+</body>
+</html>

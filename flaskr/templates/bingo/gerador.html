@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% extends 'base.html' %}
+    {% block header %}
+        <h1>{% block title %}Gerador de Cartelas{% endblock %}</h1>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+        <form method="post">
+            <label for="qtdCartelas">Digite a quantidade de Cartelas a serem geradas(n° de cartelas,n° de bolas da cartela):</label>
+            <input name="gerar" id="qtdCartelas" type="tel" placeholder="5 or 5,25" value="{{ request.form['gerar'] }}" required>
+            <input type="submit" value="gerar">
+        </form>
+        <form method="post">
+            <input name="cancel" type="submit" value="Cancel">
+        </form>
+        <div>
+            {% if bolas['rankingJson']['Cartelas'].__len__() > 0%}
+                <form method="post">
+                    <input name="cartelas" type="submit" value="Imprimir Cartelas">
+                </form>
+                {% for i in bolas['rankingJson']['Cartelas'] %}
+                   Cartela {{ i }} : {{bolas['rankingJson']['Cartelas'][i]}}
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% endblock %}
+</body>
+</html>
