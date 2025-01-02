@@ -1,6 +1,8 @@
 import os
 from flask import Flask
 import platform
+import pymysql
+pymysql.install_as_MySQLdb()
 from flask_mysqldb import MySQL
 from dotenv import load_dotenv
 # from .utils.momentjs import *
