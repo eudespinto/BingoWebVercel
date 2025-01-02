@@ -16,7 +16,6 @@ six
 urllib3
 Werkzeug
 flask-mysqldb
-mysqlclient
 python-dotenv
 pymysql
 mysql-connector-python

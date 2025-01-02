@@ -1,6 +1,5 @@
 import os
 from flask import Flask
-import platform
 from flask_mysqldb import MySQL
 from dotenv import load_dotenv
 # from .utils.momentjs import *
